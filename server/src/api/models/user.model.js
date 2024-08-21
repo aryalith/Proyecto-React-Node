@@ -7,9 +7,9 @@ const userSchema = new Schema({
     password: { type: String, require: true },
     role: { type: String, require: true, enum: ["admin", "client"], default: "client" },
     image: { type: String },
-    games_played: { type: Schema.Types.ObjectId, ref: "games" },
-    games_playing: { type: Schema.Types.ObjectId, ref: "games" },
-    games_pending: { type: Schema.Types.ObjectId, ref: "games" },
+    games_completed: [{ type: Schema.Types.ObjectId, ref: "games" }],
+    games_playing: [{ type: Schema.Types.ObjectId, ref: "games" }],
+    games_pending: [{ type: Schema.Types.ObjectId, ref: "games" }],
 },
     {
         collection: "user",

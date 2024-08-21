@@ -4,6 +4,7 @@ const { generateToken } = require("../../utils/jwt")
 const { deleteFile } = require("../../utils/deleteFileCloud")
 
 const addUser = async (req, res) => {
+
     try {
         const newUser = new User(req.body);
         const findUser = await User.find({ email: req.body.email });
@@ -37,7 +38,8 @@ const login = async (req, res) => {
             if (bcrypt.compareSync(user.password, userByEmail[0].password)) {
                 //crear el token y retornarlo
                 const data = { id: userByEmail[0]._id, email: userByEmail[0].email }
-                const token = generateToken(data)
+                const token = generateToken(data);
+
                 res.status(200).json({ message: token })
             }
             else {
@@ -56,7 +58,7 @@ const login = async (req, res) => {
 
 const getProfile = (req, res) => {
     return res.status(200).json({
-        data: req.dataUser.name,
+        data: req.dataUser.username,
         role: req.dataUser.role
     })
 }
@@ -79,6 +81,179 @@ const deleteUser = async (req, res) => {
 
     }
 }
+const addGameCompleted = async (req, res) => {
+    try {
+        const { idG } = req.params;
+
+        if (req.dataUser.games_completed.includes(idG)) {
+            return res.json({ message: "Game already added" })
+        }
+
+        if (req.dataUser.games_playing.includes(idG)) {
+            const modifyUser = await User.findByIdAndUpdate(
+                req.dataUser._id,
+                { $pull: { games_playing: idG } },
+                { new: false }
+            )
+        }
+
+        if (req.dataUser.games_pending.includes(idG)) {
+            const modifyUser = await User.findByIdAndUpdate(
+                req.dataUser._id,
+                { $pull: { games_pending: idG } },
+                { new: false }
+            )
+        }
+
+        const modifyUser = await User.findByIdAndUpdate(
+            req.dataUser._id,
+            { $push: { games_completed: idG } },
+            { new: true }
+        )
+
+        if (!modifyUser) {
+            return res.json({ message: "User not found" })
+        } else {
+            return res.json({ message: "Game added to completed", data: modifyUser })
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const addGamePlaying = async (req, res) => {
+    try {
+        const { idG } = req.params;
+
+        if (req.dataUser.games_playing.includes(idG)) {
+            return res.json({ message: "Game already added" })
+        }
+
+        if (req.dataUser.games_completed.includes(idG)) {
+            const modifyUser = await User.findByIdAndUpdate(
+                req.dataUser._id,
+                { $pull: { games_completed: idG } },
+                { new: false }
+            )
+        }
+
+        if (req.dataUser.games_pending.includes(idG)) {
+            const modifyUser = await User.findByIdAndUpdate(
+                req.dataUser._id,
+                { $pull: { games_pending: idG } },
+                { new: false }
+            )
+        }
+
+        const modifyUser = await User.findByIdAndUpdate(
+            req.dataUser._id,
+            { $push: { games_playing: idG } },
+            { new: true }
+        )
+
+        if (!modifyUser) {
+            return res.json({ message: "User not found" })
+        } else {
+            return res.json({ message: "Game added to playing", data: modifyUser })
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const addGamePending = async (req, res) => {
+    try {
+        const { idG } = req.params;
+
+        if (req.dataUser.games_pending.includes(idG)) {
+            return res.json({ message: "Game already added" })
+        }
+
+        if (req.dataUser.games_completed.includes(idG)) {
+            const modifyUser = await User.findByIdAndUpdate(
+                req.dataUser._id,
+                { $pull: { games_completed: idG } },
+                { new: false }
+            )
+        }
+
+        if (req.dataUser.games_playing.includes(idG)) {
+            const modifyUser = await User.findByIdAndUpdate(
+                req.dataUser._id,
+                { $pull: { games_playing: idG } },
+                { new: false }
+            )
+        }
+
+        const modifyUser = await User.findByIdAndUpdate(
+            req.dataUser._id,
+            { $push: { games_pending: idG } },
+            { new: true }
+        )
+        console.log(modifyUser);
+
+        if (!modifyUser) {
+            return res.json({ message: "User not found" })
+        } else {
+            return res.json({ message: "Game added to pending", data: modifyUser })
+        }
+
+    } catch (error) {
+        console.log(error);
+
+    }
+
+}
+
+const deleteGameatAny = async (req, res) => {
+    try {
+        const { idG } = req.params;
+
+        if (req.dataUser.games_completed.includes(idG)) {
+            const modifyUser = await User.findByIdAndUpdate(
+                req.dataUser._id,
+                { $pull: { games_completed: idG } },
+                { new: true }
+            )
+            if (!modifyUser) {
+                return res.json({ message: "Incorrect data" })
+            } else {
+                return res.json({ message: "Game removed", data: modifyUser })
+            }
+        }
+
+        if (req.dataUser.games_playing.includes(idG)) {
+            const modifyUser = await User.findByIdAndUpdate(
+                req.dataUser._id,
+                { $pull: { games_playing: idG } },
+                { new: true }
+            )
+            if (!modifyUser) {
+                return res.json({ message: "Incorrect data" })
+            } else {
+                return res.json({ message: "Game removed", data: modifyUser })
+            }
+        }
+
+        if (req.dataUser.games_pending.includes(idG)) {
+            const modifyUser = await User.findByIdAndUpdate(
+                req.dataUser._id,
+                { $pull: { games_pending: idG } },
+                { new: true }
+            )
+            if (!modifyUser) {
+                return res.json({ message: "Incorrect data" })
+            } else {
+                return res.json({ message: "Game removed", data: modifyUser })
+            }
+        }
 
 
-module.exports = { addUser, login, getProfile, deleteUser }
+    } catch (error) {
+
+    }
+}
+
+
+module.exports = { addUser, login, getProfile, deleteUser, addGameCompleted, addGamePlaying, addGamePending, deleteGameatAny }

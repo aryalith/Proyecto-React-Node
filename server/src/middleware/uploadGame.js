@@ -5,9 +5,9 @@ const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-        folder: "users",
+        folder: "games",
         allowedFormats: ["jpg", "png", "jpeg"]
     }
 });
-const upload = multer({ storage });
-module.exports = upload;
+const uploadGame = multer({ storage });
+module.exports = uploadGame;
