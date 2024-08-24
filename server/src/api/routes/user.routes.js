@@ -1,11 +1,13 @@
 const express = require("express");
-const { addUser, login, getProfile, deleteUser, addGameCompleted, addGamePlaying, addGamePending, deleteGameatAny } = require("../controlers/user.controllers");
+const { addUser, login, getLibrary, getProfile, deleteUser, addGameCompleted, addGamePlaying, addGamePending, deleteGameatAny } = require("../controlers/user.controllers");
 const { isAuth, isAdmin } = require("../../middleware/auth")
 const router = express.Router();
 const uploadUser = require("../../middleware/uploadUser");
 
 router.post("/add", uploadUser.single("image"), addUser);
 router.post("/login", login)
+//libreria de juegos del jugador
+router.get("/library", [isAuth], getLibrary)
 //modifical perfil de usuario
 router.get("/profile", [isAuth], getProfile);
 router.delete("/delete", [isAdmin], deleteUser);

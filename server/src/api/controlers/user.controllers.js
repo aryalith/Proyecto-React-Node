@@ -40,7 +40,8 @@ const login = async (req, res) => {
                 const data = { id: userByEmail[0]._id, email: userByEmail[0].email }
                 const token = generateToken(data);
 
-                res.status(200).json({ message: token })
+                //meti aqui el usebyemail
+                res.status(200).json({ data: userByEmail, message: token })
             }
             else {
                 res.status(200).json({ message: "La contraseña es incorrecta" })
@@ -54,6 +55,13 @@ const login = async (req, res) => {
         console.log(error);
     }
 
+}
+
+const getLibrary = (req, res) => {
+    return res.status(200).json({
+        user: req.dataUser.username,
+        data: [req.dataUser.games_completed, req.dataUser.games_playing, req.dataUser.games_pending]
+    })
 }
 
 const getProfile = (req, res) => {
@@ -256,4 +264,4 @@ const deleteGameatAny = async (req, res) => {
 }
 
 
-module.exports = { addUser, login, getProfile, deleteUser, addGameCompleted, addGamePlaying, addGamePending, deleteGameatAny }
+module.exports = { addUser, login, getLibrary, getProfile, deleteUser, addGameCompleted, addGamePlaying, addGamePending, deleteGameatAny }

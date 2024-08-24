@@ -54,7 +54,6 @@ const getAllGames = async (req, res) => {
             data: allGames
         })
 
-        console.log(numPage);
     } catch (error) {
         console.log(error);
 
@@ -62,8 +61,9 @@ const getAllGames = async (req, res) => {
 }
 //ta mal
 const getGameById = async (req, res) => {
-    const { id } = req.query;
-    const games = await Game.findById(id).populate("user");
+    const { id } = req.params;
+    //const games = await Game.findById(id).populate("users");
+    const games = await Game.findById(id);
     if (!games) {
         return res.json({ message: "Game not found" })
     }

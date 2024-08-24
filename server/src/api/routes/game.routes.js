@@ -7,7 +7,7 @@ const uploadGame = require("../../middleware/uploadGame");
 router.post("/add", [isAdmin], uploadGame.single("image"), addGame);
 router.delete("/delete", [isAdmin], deleteGame);
 router.get("/all", getAllGames);
-router.get("/byId", getGameById);
+router.get("/detail/:id", getGameById);
 router.put("/update", [isAdmin], updateGame)
 
 module.exports = router;
