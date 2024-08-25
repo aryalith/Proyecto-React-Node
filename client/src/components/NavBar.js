@@ -1,6 +1,5 @@
 import React from "react";
 import Nav from 'react-bootstrap/Nav';
-import Col from 'react-bootstrap/Col';
 import { useAuth } from "../context/AuthProvider";
 
 export default function NavBar() {

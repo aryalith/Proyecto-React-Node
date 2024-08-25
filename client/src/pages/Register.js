@@ -10,6 +10,7 @@ function Register() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [image, setImage] = useState(null);
+    const [info, setInfo] = useState("");
 
     const handleFileChange = (e) => {
         setImage(e.target.files[0]);
@@ -34,14 +35,12 @@ function Register() {
 
         try {
             const res = await fetch('http://localhost:5000/user/add', {
-                method: 'POST',  // Método POST
-                body: formData,  // Enviar el nombre en el cuerpo de la solicitud
+                method: 'POST',
+                body: formData,
             });
-            //console.log(user);
-            console.log(formData);
 
-            const text = await res.text();  // Convertir la respuesta a texto
-            console.log(text);  // Actualizar el estado con la respuesta
+            const text = await res.json();  // Convertir la respuesta a texto
+            setInfo(text.message);  // Actualizar el estado con la respuesta
         } catch (error) {
             console.error('Error fetching data:', error);
             // Mostrar mensaje en caso de error
@@ -53,14 +52,21 @@ function Register() {
 
     return (
         <div className='container home login'>
+            <p>{info}</p>
             <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicUsername">
                     <Form.Label>Username</Form.Label>
-                    <Form.Control type="username" placeholder="Enter username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                    <Form.Control type="username" placeholder="Enter username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                    <Form.Control.Feedback type="invalid">
+                        Please choose a username.
+                    </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                    <Form.Control.Feedback type="invalid">
+                        Please enter an email.
+                    </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group controlId="formFile" className="mb-3">
                     <Form.Label>Default file input example</Form.Label>
@@ -68,7 +74,10 @@ function Register() {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                    <Form.Control.Feedback type="invalid">
+                        Please enter a password.
+                    </Form.Control.Feedback>
                 </Form.Group>
                 <Button variant="info" type='submit'>
                     Register

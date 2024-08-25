@@ -31,7 +31,7 @@ function App() {
             <Route path="/detail" element={<GameDetails />} />
             <Route path="/login" element={<LogIn />} />
             <Route path="/register" element={<Register />} />
-            <Route element={<PrivateRoute />}>
+            <Route element={<AdminRoute />}>
               <Route path="/mylibrary" element={<UserLibrary />} />
             </Route>
             <Route path="/profile" element={<Profile />} />

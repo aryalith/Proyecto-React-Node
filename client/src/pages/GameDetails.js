@@ -3,32 +3,23 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useSearchParams } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
+import { useAuth } from "../context/AuthProvider";
 
 export default function GameDetails() {
     const [queryParameters] = useSearchParams();
     const id = queryParameters.get("game");
     const [game, setGame] = useState({});
+    const auth = useAuth();
+
     useEffect(() => {
         fetch(`http://localhost:5000/games/detail/${id}`)
             .then((res) => res.json())
             .then((res) => res.data)
             .then((res) => {
-                console.log(res.title);
                 setGame(res);
-
-                // return ({
-                //     //allPokemonData.push({
-                //     name: data.name,
-                //     image: data.sprites.other.home.front_default,
-                //     price: data.base_experience
-                //     //})
-                // })
             })
-
-
-        //setAllData(allPokemonData)
     }, [id]);
-    //ya tengo el item
+
     return (
         <div className="container home">
             <Container>
@@ -44,6 +35,7 @@ export default function GameDetails() {
                         <p><span>Avaiable platforms: </span>{game.platform}</p>
                     </div>
                 </div>
+
             </Container>
         </div>
     );

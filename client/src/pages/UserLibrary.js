@@ -42,7 +42,7 @@ const UserLibrary = () => {
     return (
         <div className="container">
             <div>
-                <h1>Welcome! {auth.user?.username}</h1>
+                <h1>Welcome! {auth.user[0].username}</h1>
                 <button onClick={() => auth.logOut()} className="btn-submit">
                     logout
                 </button>
