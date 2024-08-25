@@ -4,12 +4,19 @@ import { useEffect } from "react";
 import { useSearchParams } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import { useAuth } from "../context/AuthProvider";
+import Button from 'react-bootstrap/Button';
+import { useNavigate } from "react-router-dom";
 
 export default function GameDetails() {
     const [queryParameters] = useSearchParams();
     const id = queryParameters.get("game");
     const [game, setGame] = useState({});
-    const auth = useAuth();
+    const [info, setInfo] = useState("");
+    const [userData, setuserData] = useState({});
+    const [gamesCompleted, setGamesCompleted] = useState([])
+    const user = useAuth();
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch(`http://localhost:5000/games/detail/${id}`)
@@ -19,6 +26,113 @@ export default function GameDetails() {
                 setGame(res);
             })
     }, [id]);
+
+
+    const handleDelete = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:5000/games/delete/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+
+            });
+            const text = await res.json();  // Convertir la respuesta a texto
+            console.log(text);
+
+            setInfo(text.message);  // Actualizar el estado con la respuesta
+            navigate("/allgames");
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setInfo(error)
+            // Mostrar mensaje en caso de error
+        }
+
+    }
+
+    const handleAddToCompleted = async () => {
+        try {
+            const res = await fetch(`http://localhost:5000/user/addGameCompleted/${id}`, {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+
+            });
+            const text = await res.json();
+            let newData = JSON.parse(localStorage.getItem("userData"));
+            newData.games_completed.push(id);
+            localStorage.setItem("userData", JSON.stringify(newData));
+            console.log(text);
+            setInfo(text.message);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setInfo(error)
+
+        }
+    }
+    const handleAddToPlaying = async () => {
+        try {
+            const res = await fetch(`http://localhost:5000/user/addGamePlaying/${id}`, {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+
+            });
+            const text = await res.json();
+            let newData = JSON.parse(localStorage.getItem("userData"));
+            newData.games_playing.push(id);
+            localStorage.setItem("userData", JSON.stringify(newData));
+            console.log(text);
+            setInfo(text.message);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setInfo(error)
+
+        }
+    }
+    const handleAddToPending = async () => {
+        try {
+            const res = await fetch(`http://localhost:5000/user/addGamePending/${id}`, {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+
+            });
+            const text = await res.json();
+            let newData = JSON.parse(localStorage.getItem("userData"));
+            newData.games_pending.push(id);
+            localStorage.setItem("userData", JSON.stringify(newData));
+            console.log(text);
+            setInfo(text.message);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setInfo(error)
+
+        }
+    }
+    const handleRemove = async (library) => {
+        try {
+            const res = await fetch(`http://localhost:5000/user/deleteGame/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            });
+            const text = await res.json();
+            let newData = JSON.parse(localStorage.getItem("userData"));
+            newData[library] = newData[library].filter((i) => i !== id);
+            localStorage.setItem("userData", JSON.stringify(newData));
+            console.log(text);
+            setInfo(text.message);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setInfo(error)
+        }
+    }
 
     return (
         <div className="container home">
@@ -33,9 +147,28 @@ export default function GameDetails() {
                         <p><span>Developer: </span>{game.developer}</p>
                         <p><span>Release Date: </span>{game.release_date}</p>
                         <p><span>Avaiable platforms: </span>{game.platform}</p>
+                        <p className="infogame">{info}</p>
+                        <div>
+                            {JSON.parse(localStorage.getItem("userData")).games_completed.includes(id) ?
+                                <Button variant="primary" onClick={() => handleRemove("games_completed")}>Completed x</Button> :
+                                JSON.parse(localStorage.getItem("userData")).games_playing.includes(id) ?
+                                    <Button variant="primary" onClick={() => handleRemove("games_playing")}>Playing x</Button> :
+                                    JSON.parse(localStorage.getItem("userData")).games_pending.includes(id) ?
+                                        <Button variant="primary" onClick={() => handleRemove("games_pending")}>Pending x</Button> :
+                                        <>
+                                            <Button variant="primary" onClick={handleAddToCompleted}>Add to Completed</Button>
+                                            <Button variant="primary" onClick={handleAddToPlaying}>Add to Playing</Button>
+                                            <Button variant="primary" onClick={handleAddToPending}>Add to Pending</Button>
+                                        </>
+                            }
+                        </div>
+                        <div>
+                            {user.role === "admin" ?
+                                <Button variant="danger" onClick={handleDelete}>Delete Game</Button> : ""
+                            }
+                        </div>
                     </div>
                 </div>
-
             </Container>
         </div>
     );

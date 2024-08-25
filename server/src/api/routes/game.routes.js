@@ -5,7 +5,7 @@ const router = express.Router();
 const uploadGame = require("../../middleware/uploadGame");
 
 router.post("/add", [isAdmin], uploadGame.single("image"), addGame);
-router.delete("/delete", [isAdmin], deleteGame);
+router.delete("/delete/:id", [isAdmin], deleteGame);
 router.get("/all", getAllGames);
 router.get("/detail/:id", getGameById);
 router.put("/update", [isAdmin], updateGame)

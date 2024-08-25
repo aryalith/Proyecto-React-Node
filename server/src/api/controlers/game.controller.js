@@ -72,11 +72,11 @@ const getGameById = async (req, res) => {
 
 const deleteGame = async (req, res) => {
     try {
-        const tobeDeleted = req.query;
-        const deleteUser = await Game.findByIdAndDelete(tobeDeleted);
+        const { id } = req.params;
+        const deleteGame = await Game.findByIdAndDelete(id);
         //borrar la foto del cloudinary
-        if (deleteUser) {
-            deleteFile(deleteUser.image)
+        if (deleteGame) {
+            deleteFile(deleteGame.image)
             return res.status(200).json({ message: "Game deleted" })
         }
         else {

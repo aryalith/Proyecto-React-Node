@@ -140,6 +140,17 @@ body {
   color: rgb(178, 178, 178) !important;
 }
 
+.btn-primary {
+  background-color: rgb(34, 98, 172);
+  border: rgb(34, 98, 172);
+  margin-right: 5px;
+  margin-bottom: 10px;
+
+  &:hover {
+    background-color: rgb(26, 76, 133)
+  }
+}
+
 .details {
   display: flex;
   flex-wrap: nowrap;
@@ -162,4 +173,10 @@ body {
   & p {
     font-size: 20px;
   }
+}
+
+p.infogame {
+  font-size: 16px;
+  font-style: italic;
+  color: rgb(188, 188, 188);
 }

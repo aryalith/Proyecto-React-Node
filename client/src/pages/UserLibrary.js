@@ -1,52 +1,74 @@
-//Aqui tu perfil de usuario
-// UserPage.js
-// import React, { useEffect, useState } from 'react';
 
-// function Pofile() {
-//     const [message, setMessage] = useState('');
-
-//     useEffect(() => {
-//         const fetchData = async () => {
-//             try {
-//                 const response = await fetch('http://localhost:5000/user/library', {
-//                     headers: {
-//                         Authorization: `Bearer ${localStorage.getItem('token')}`
-//                     }
-//                 });
-
-//                 if (!response.ok) {
-//                     throw new Error('Failed to fetch user data');
-//                 }
-
-//                 const data = await response.json();
-//                 console.log(data);
-
-//                 setMessage(data.user);
-//             } catch (error) {
-//                 console.error('Error fetching user data', error);
-//             }
-//         };
-
-//         fetchData();
-//     }, []);
-
-//     return <h1>{message}</h1>;
-// }
-
-// export default Pofile;
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthProvider";
+import Game from "../components/Game";
+import CardGroup from 'react-bootstrap/CardGroup';
+import { useNavigate } from 'react-router-dom';
 
 const UserLibrary = () => {
     const auth = useAuth();
+    const [username, setusername] = useState("");
+    const [games, setGames] = useState({});
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        fetch(`http://localhost:5000/user/library`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${auth.token}`,
+            },
+
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                setusername(res.user);
+                setGames(res.data);
+                console.log(res.data.games_playing.length)
+            })
+
+    }, [auth.token]);
+
+    const handleDetails = (game) => {
+        navigate(`/detail?game=${game._id}`)
+    }
+
     return (
-        <div className="container">
-            <div>
-                <h1>Welcome! {auth.user[0].username}</h1>
-                <button onClick={() => auth.logOut()} className="btn-submit">
-                    logout
-                </button>
-            </div>
+        <div className="container home">
+            <h2 className="welcome"> {username}'s Library</h2>
+            <h4>Games Completed</h4>
+            {!games.games_completed ?
+                "" :
+                games.games_completed.length > 0 ?
+                    games.games_completed.map((game, i) => (
+                        <CardGroup>
+                            <Game key={i} game={game} getDetails={handleDetails} />
+                        </CardGroup>
+                    )) :
+                    <p>No games completed</p>}
+
+            <h4>Games Playing</h4>
+            {!games.games_playing ?
+                "" :
+                games.games_playing.length > 0 ?
+                    games.games_playing.map((game, i) => (
+                        <CardGroup>
+                            <Game key={i} game={game} getDetails={handleDetails} />
+                        </CardGroup>
+                    )) :
+                    <p>No games playing</p>}
+
+            <h4>Games Pending</h4>
+
+            {!games.games_pending ?
+                "" :
+                games.games_pending.length > 0 ?
+                    games.games_pending.map((game, i) => (
+                        <CardGroup>
+                            <Game key={i} game={game} getDetails={handleDetails} />
+                        </CardGroup>)) :
+                    <p>No games pending</p>}
+
+
         </div>
     );
 };

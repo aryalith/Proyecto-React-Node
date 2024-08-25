@@ -57,10 +57,15 @@ const login = async (req, res) => {
 
 }
 
-const getLibrary = (req, res) => {
+const getLibrary = async (req, res) => {
+    const user = await User.findById(req.dataUser._id).populate("games_completed").populate("games_playing").populate("games_pending")
     return res.status(200).json({
-        user: req.dataUser.username,
-        data: [req.dataUser.games_completed, req.dataUser.games_playing, req.dataUser.games_pending]
+        user: user.username,
+        data: {
+            games_completed: user.games_completed,
+            games_playing: user.games_playing,
+            games_pending: user.games_pending
+        }
     })
 }
 

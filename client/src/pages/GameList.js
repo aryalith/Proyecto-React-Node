@@ -23,8 +23,6 @@ export default function GameList() {
     }, [])
 
     const handleDetails = (game) => {
-        console.log(game._id);
-        //setId(game._id);
         navigate(`/detail?game=${game._id}`)
     }
 
@@ -35,7 +33,8 @@ export default function GameList() {
             <CardGroup>{allGames
                 ? allGames.map((game, i) => (
                     <Game key={i} game={game} getDetails={handleDetails} />
-                )) : ""}</CardGroup>
+                )) : ""}
+            </CardGroup>
         </div>
     )
 }

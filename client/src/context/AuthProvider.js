@@ -6,7 +6,8 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(localStorage.getItem("token") || "");
-    const [role, setRole] = useState("");
+    const [role, setRole] = useState(localStorage.getItem("role") || "");
+    const [userData, setUserData] = useState(localStorage.getItem("userData") || "");
     const navigate = useNavigate();
 
     // Aquí puedes hacer una llamada a la API para verificar el token y obtener los datos del usuario
@@ -44,15 +45,15 @@ const AuthProvider = ({ children }) => {
                 throw new Error('Login failed');
             }
 
-            setUser(res.data[0]);
-            console.log(res.data);
-
+            setUser(res.data);
+            setUserData(res.data[0])
             setRole(res.data[0].role)
 
             setToken(res.message);
             localStorage.setItem("role", res.data[0].role);
             localStorage.setItem("token", res.message);
-            // navigate("/mylibrary");
+            localStorage.setItem("userData", JSON.stringify(res.data[0]));
+            navigate("/mylibrary");
             return;
 
 
@@ -66,11 +67,12 @@ const AuthProvider = ({ children }) => {
         setToken("");
         localStorage.removeItem("token");
         localStorage.removeItem("role");
+        localStorage.removeItem("userData");
         navigate("/");
     };
 
     return (
-        <AuthContext.Provider value={{ token, role, loginAction, logOut }}>
+        <AuthContext.Provider value={{ token, role, userData, user, loginAction, logOut }}>
             {children}
         </AuthContext.Provider>
     );
