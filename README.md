@@ -4,6 +4,8 @@ My Game List is an API where you can register and make 3 kinds of game lists. It
 Users can have two roles: client or admin. Admin can DELETE games in the global library.
 Every user have a personal Library where they can check their list of games added in each status.
 
+Server is also in https://my-game-list-react-node.onrender.com/ but routes in front need to be change if you want to use it.
+
 ## Installation
 
 You need to download both folders and install react and node.
