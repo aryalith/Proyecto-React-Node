@@ -1,4 +1,3 @@
-//aquí se hará login o create usuario
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import React, { useState } from 'react';
@@ -39,11 +38,10 @@ function Register() {
                 body: formData,
             });
 
-            const text = await res.json();  // Convertir la respuesta a texto
-            setInfo(text.message);  // Actualizar el estado con la respuesta
+            const text = await res.json();
+            setInfo(text.message);
         } catch (error) {
             console.error('Error fetching data:', error);
-            // Mostrar mensaje en caso de error
         }
     };
 
@@ -69,7 +67,7 @@ function Register() {
                     </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group controlId="formFile" className="mb-3">
-                    <Form.Label>Default file input example</Form.Label>
+                    <Form.Label>Profile Image</Form.Label>
                     <Form.Control type="file" onChange={handleFileChange} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">

@@ -1,5 +1,3 @@
-//Aqui tu perfil de usuario
-// UserPage.js
 import React, { useEffect, useState } from 'react';
 
 function Pofile() {

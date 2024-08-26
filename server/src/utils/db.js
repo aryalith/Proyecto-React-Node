@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-//antes del signo de interrogacion pongo el nombre de la BD
 
 const connectDB = async () => {
 

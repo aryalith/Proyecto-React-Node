@@ -1,6 +1,6 @@
 const express = require("express");
 const { addGame, deleteGame, getAllGames, getGameById, updateGame } = require("../controlers/game.controller");
-const { /* isAuth */ isAdmin } = require("../../middleware/auth")
+const { isAdmin } = require("../../middleware/auth")
 const router = express.Router();
 const uploadGame = require("../../middleware/uploadGame");
 

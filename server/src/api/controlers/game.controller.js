@@ -27,7 +27,6 @@ const addGame = async (req, res) => {
 
 const getAllGames = async (req, res) => {
     try {
-        //http://localhost:3000/characters/all?pag=5&limit=10
         let pag = parseInt(req.query.pag)
         let limit = parseInt(req.query.limit)
 
@@ -59,10 +58,9 @@ const getAllGames = async (req, res) => {
 
     }
 }
-//ta mal
+
 const getGameById = async (req, res) => {
     const { id } = req.params;
-    //const games = await Game.findById(id).populate("users");
     const games = await Game.findById(id);
     if (!games) {
         return res.json({ message: "Game not found" })
@@ -74,7 +72,6 @@ const deleteGame = async (req, res) => {
     try {
         const { id } = req.params;
         const deleteGame = await Game.findByIdAndDelete(id);
-        //borrar la foto del cloudinary
         if (deleteGame) {
             deleteFile(deleteGame.image)
             return res.status(200).json({ message: "Game deleted" })
@@ -88,7 +85,6 @@ const deleteGame = async (req, res) => {
     }
 }
 
-//esto updatea por el body, no por el form
 const updateGame = async (req, res) => {
     try {
         const { id } = req.query;

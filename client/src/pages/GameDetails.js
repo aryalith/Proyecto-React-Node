@@ -1,4 +1,3 @@
-//aqui cada juego individual
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useSearchParams } from 'react-router-dom';
@@ -12,8 +11,6 @@ export default function GameDetails() {
     const id = queryParameters.get("game");
     const [game, setGame] = useState({});
     const [info, setInfo] = useState("");
-    const [userData, setuserData] = useState({});
-    const [gamesCompleted, setGamesCompleted] = useState([])
     const user = useAuth();
 
     const navigate = useNavigate();
@@ -38,15 +35,14 @@ export default function GameDetails() {
                 },
 
             });
-            const text = await res.json();  // Convertir la respuesta a texto
+            const text = await res.json();
             console.log(text);
 
-            setInfo(text.message);  // Actualizar el estado con la respuesta
+            setInfo(text.message);
             navigate("/allgames");
         } catch (error) {
             console.error('Error fetching data:', error);
             setInfo(error)
-            // Mostrar mensaje en caso de error
         }
 
     }
@@ -126,7 +122,6 @@ export default function GameDetails() {
             let newData = JSON.parse(localStorage.getItem("userData"));
             newData[library] = newData[library].filter((i) => i !== id);
             localStorage.setItem("userData", JSON.stringify(newData));
-            console.log(text);
             setInfo(text.message);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -139,7 +134,7 @@ export default function GameDetails() {
             <Container>
                 <div className="details">
                     <div>
-                        <img src={game.image} alt={game.title} />
+                        <img className="game-img2" src={game.image} alt={game.title} />
                     </div>
                     <div className="game-details">
                         <h3>{game.title}</h3>
@@ -149,17 +144,19 @@ export default function GameDetails() {
                         <p><span>Avaiable platforms: </span>{game.platform}</p>
                         <p className="infogame">{info}</p>
                         <div>
-                            {JSON.parse(localStorage.getItem("userData")).games_completed.includes(id) ?
-                                <Button variant="primary" onClick={() => handleRemove("games_completed")}>Completed x</Button> :
-                                JSON.parse(localStorage.getItem("userData")).games_playing.includes(id) ?
-                                    <Button variant="primary" onClick={() => handleRemove("games_playing")}>Playing x</Button> :
-                                    JSON.parse(localStorage.getItem("userData")).games_pending.includes(id) ?
-                                        <Button variant="primary" onClick={() => handleRemove("games_pending")}>Pending x</Button> :
-                                        <>
-                                            <Button variant="primary" onClick={handleAddToCompleted}>Add to Completed</Button>
-                                            <Button variant="primary" onClick={handleAddToPlaying}>Add to Playing</Button>
-                                            <Button variant="primary" onClick={handleAddToPending}>Add to Pending</Button>
-                                        </>
+                            {!user.token ?
+                                "" :
+                                JSON.parse(localStorage.getItem("userData")).games_completed.includes(id) ?
+                                    <Button variant="primary" onClick={() => handleRemove("games_completed")}>Completed x</Button> :
+                                    JSON.parse(localStorage.getItem("userData")).games_playing.includes(id) ?
+                                        <Button variant="primary" onClick={() => handleRemove("games_playing")}>Playing x</Button> :
+                                        JSON.parse(localStorage.getItem("userData")).games_pending.includes(id) ?
+                                            <Button variant="primary" onClick={() => handleRemove("games_pending")}>Pending x</Button> :
+                                            <>
+                                                <Button variant="primary" onClick={handleAddToCompleted}>Add to Completed</Button>
+                                                <Button variant="primary" onClick={handleAddToPlaying}>Add to Playing</Button>
+                                                <Button variant="primary" onClick={handleAddToPending}>Add to Pending</Button>
+                                            </>
                             }
                         </div>
                         <div>

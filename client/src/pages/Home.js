@@ -1,4 +1,3 @@
-//aqui habrá explicación de que va la web
 import React from "react";
 
 export default function Home() {

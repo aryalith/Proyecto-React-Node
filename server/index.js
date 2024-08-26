@@ -27,8 +27,3 @@ server.use("/games", routerGames)
 server.listen(PORT, () => {
     console.log(`listen port http://localhost: ${PORT}`);
 })
-
-//modelos --> estructura de BD (colecciones),
-//vistas --> routes
-//controladores --> funcionalidad para acceder a la BD
-//utils --> funciones de validaciones, conecciones de BD, middleware

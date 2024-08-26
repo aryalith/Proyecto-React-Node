@@ -8,14 +8,11 @@ import GameDetails from './pages/GameDetails';
 import LogIn from './pages/LogIn';
 import UserLibrary from './pages/UserLibrary';
 import Profile from './pages/Profile';
-import Register from './pages/Register'
-//import NotFound from './pages/NotFound';
+import Register from './pages/Register';
 import NavBar from './components/NavBar';
 import Header from './components/Header';
-import Footer from './components/Footer';
 import AuthProvider from "./context/AuthProvider";
 import PrivateRoute from "./utils/PrivateRoute";
-import AdminRoute from './utils/AdminRoute';
 
 
 function App() {
@@ -35,10 +32,7 @@ function App() {
               <Route path="/mylibrary" element={<UserLibrary />} />
             </Route>
             <Route path="/profile" element={<Profile />} />
-            {/* <Route path="/mylibrary" element={<UserLibrary />} /> */}
-            {/* <Route path="*" element={<NotFound />} /> */}
           </Routes>
-          {/*  <Footer /> */}
         </AuthProvider>
       </Router>
     </div>

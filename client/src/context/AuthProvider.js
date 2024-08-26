@@ -10,27 +10,6 @@ const AuthProvider = ({ children }) => {
     const [userData, setUserData] = useState(localStorage.getItem("userData") || "");
     const navigate = useNavigate();
 
-    // Aquí puedes hacer una llamada a la API para verificar el token y obtener los datos del usuario
-    // Este es un ejemplo ficticio:
-    // const fetchUser = async () => {
-    //     try {
-    //         const response = await fetch('http://localhost:5000/user/', {
-    //             headers: {
-    //                 'Authorization': `Bearer ${token}`
-    //             }
-    //         });
-    //         const data = await response.json();
-    //         if (response.ok) {
-    //             setUser(data); // Suponiendo que data contiene la información del usuario
-    //         } else {
-    //             throw new Error('Token invalid or expired');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error fetching user data:', error);
-    //         setUser(null); // Si hay un error, asegúrate de limpiar el usuario
-    //     }
-    // };
-
     const loginAction = async ({ email, password }) => {
         try {
             const response = await fetch('http://localhost:5000/user/login', {

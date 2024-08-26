@@ -36,11 +36,8 @@ const login = async (req, res) => {
         const userByEmail = await User.find({ email: user.email });
         if (userByEmail.length != 0) {
             if (bcrypt.compareSync(user.password, userByEmail[0].password)) {
-                //crear el token y retornarlo
                 const data = { id: userByEmail[0]._id, email: userByEmail[0].email }
                 const token = generateToken(data);
-
-                //meti aqui el usebyemail
                 res.status(200).json({ data: userByEmail, message: token })
             }
             else {
@@ -80,7 +77,6 @@ const deleteUser = async (req, res) => {
     try {
         const tobeDeleted = req.query;
         const deleteUser = await User.findByIdAndDelete(tobeDeleted);
-        //borrar la foto del cloudinary
 
         if (deleteUser) {
             deleteFile(deleteUser.image)

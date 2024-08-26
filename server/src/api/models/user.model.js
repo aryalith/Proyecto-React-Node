@@ -13,7 +13,7 @@ const userSchema = new Schema({
 },
     {
         collection: "user",
-        timestamps: true //createdAt -->
+        timestamps: true
     }
 )
 
